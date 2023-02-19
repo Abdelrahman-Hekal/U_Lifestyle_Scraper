@@ -20,7 +20,17 @@ def initialize_bot():
 
     # Setting up chrome driver for the bot
     chrome_options = uc.ChromeOptions()
-    #chrome_options  = webdriver.ChromeOptions()
+    chrome_options.add_argument('--log-level=3')
+    chrome_options.add_argument('--headless')
+    chrome_options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    # installing the chrome driver
+    driver_path = ChromeDriverManager().install()
+    chrome_service = ChromeService(driver_path)
+    # configuring the driver
+    driver = webdriver.Chrome(options=chrome_options, service=chrome_service)
+    ver = int(driver.capabilities['chrome']['chromedriverVersion'].split('.')[0])
+    driver.quit()
+    chrome_options = uc.ChromeOptions()
     chrome_options.add_argument('--headless')
     chrome_options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36")
     chrome_options.add_argument('--log-level=3')
@@ -33,16 +43,7 @@ def initialize_bot():
     # disable location prompts & disable images loading
     prefs = {"profile.default_content_setting_values.geolocation": 2, "profile.managed_default_content_settings.images": 2}
     chrome_options.add_experimental_option("prefs", prefs)
-
-    # installing the chrome driver
-    driver_path = ChromeDriverManager().install()
-    chrome_service = ChromeService(driver_path)
-    # configuring the driver
-    driver = webdriver.Chrome(options=chrome_options, service=chrome_service)
-    ver = int(driver.capabilities['chrome']['chromedriverVersion'].split('.')[0])
-    driver.quit()
-    driver = uc.Chrome(version_main = ver, options=chrome_options)
-    
+    driver = uc.Chrome(version_main = ver, options=chrome_options) 
     driver.set_window_size(1920, 1080, driver.window_handles[0])
     driver.maximize_window()
     driver.set_page_load_timeout(300)
@@ -63,7 +64,7 @@ def scrape_posts(driver, output1, page):
         try:
             height1 = driver.execute_script("return document.body.scrollHeight")
             driver.execute_script(f"window.scrollTo(0, {height1})")
-            time.sleep(1)
+            time.sleep(2)
             height2 = driver.execute_script("return document.body.scrollHeight")
             if int(height2) == int(height1):
                 break
