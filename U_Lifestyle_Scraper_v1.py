@@ -96,7 +96,7 @@ def scrape_posts(driver, output1, page):
     for i, link in enumerate(links):
         try:
             driver.get(link)           
-            details, review = {}, {}
+            details = {}
             print(f'Scraping the details of post {i+1}\{n}')
 
             # Post title
@@ -157,9 +157,11 @@ def scrape_posts(driver, output1, page):
             text_tags = ['p', 'h2', 'h3', 'h4']
             try:
                 div = wait(driver, 2).until(EC.presence_of_element_located((By.CSS_SELECTOR, "div.content-lazy")))
-                elems = wait(div, 2).until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, "*")))
+                time.sleep(2)
+                elems = wait(div, 10).until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, "*")))
+                time.sleep(2)
                 if len(elems) < 2:
-                    div = wait(driver, 2).until(EC.presence_of_element_located((By.CSS_SELECTOR, "div.margin-b")))
+                    div = wait(driver, 2).until(EC.presence_of_element_located((By.XPATH, "//div[@id='content-main']")))
                     elems = wait(div, 2).until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, "*")))
 
                 for elem in elems:
@@ -174,7 +176,27 @@ def scrape_posts(driver, output1, page):
                         pass
             except Exception as err:
                 pass
+              
+            if content == '':
+                try:
+                    div = wait(driver, 2).until(EC.presence_of_element_located((By.XPATH, "//div[@id='content-main']")))
+                    elems = wait(div, 2).until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, "p")))
+                    for elem in elems:
+                        try:
+                            text = elem.text.strip()
+                            if len(text) > 0:
+                                content += text + '\n'
+                        except:
+                            pass
+                except:
+                    pass            
                 
+            if content == '':
+                try:
+                    content = wait(driver, 2).until(EC.presence_of_element_located((By.XPATH, "//div[@id='content-main']"))).text.replace('Play Video', '').strip()
+                except:
+                    pass
+
             details['Article_Content'] = content                        
             # tags
             tags = ''
