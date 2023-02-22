@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>308a491a-2661-466d-8db1-a3eda2e4943f</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>U_Lifestyle_Scraper_v1.py</StartupFile>
+    <StartupFile>U_Lifestyle_Scraper_v1.1.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -21,7 +21,7 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="U_Lifestyle_Scraper_v1.py" />
+    <Compile Include="U_Lifestyle_Scraper_v1.1.py" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
